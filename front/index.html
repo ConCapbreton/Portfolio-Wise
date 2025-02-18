@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./index.js" type="module" defer></script>
+    <script src="./fetches/authFetches.js" type="module" defer></script>
+    <script src="./fetches/userFetches.js" type="module" defer></script>
+    <script src="./formLogic/formLogic.js" type="module" defer></script>
+    <link rel="stylesheet" href="./styles.css">
+    <title>FrontEnd routes, forms and form checking logic</title>
+</head>
+<body>
+    <button id="login-register-btn">Click to register a new user</button>
+    <p id="messages"></p>
+    <form id="login-form">
+        <h1>Login</h1>
+        <label for="login-username">Username</label>
+        <input id="login-username" type="text" minlength="3" maxlength="20" required>
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" required>
+        <input type="submit" id="login-submit">
+    </form>
+    <button id="logout-btn" style="display: none">Logout</button>
+    <form id="register-form" style="display: none">
+        <h1>Register a new user</h1>
+        <label for="register-username">Username</label>
+        <input id="register-username" type="text" minlength="3" maxlength="20" required>
+        <label for="register-email">Email</label>
+        <input id="register-email" type="email" required>
+        <label for="register-password">Password</label>
+        <input id="register-password" type="password" minlength="6" required>
+        <input type="submit">
+    </form>
+    <div id="user-routes" style="display: none">
+        <h1>JWT VERIFIED USER ROUTES</h1>
+        <div>
+            <h2>Get all users</h2>
+            <p id="get-users-message"></p>
+            <button id="get-users-btn">Get all users</button>
+            <div id="get-users-div"></div>
+        </div>
+            <form id="update-user">
+                <h2>Update users (complete all fields)</h2>
+                <p id="update-user-message"></p>
+                <label for="update-id">User ID</label>
+                <input id="update-id" type="text" minlength="24" maxlength="24" required>
+                <label for="update-username">Username</label>
+                <input id="update-username" type="text" minlength="3" maxlength="20" required>
+                <label for="update-email">Email</label>
+                <input id="update-email" type="email" required>
+                <label for="update-password">Password</label>
+                <input id="update-password" type="password" minlength="6" required>
+                <input type="submit">
+            </form>
+        <div>
+            <form id="delete-user">
+                <h2>Delete user</h2>
+                <p id="delete-user-message"></p>
+                <label for="delete-id">User ID</label>
+                <input id="delete-id" type="text" minlength="24" maxlength="24" required>
+                <input type="submit" id="delete-submit">
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>
