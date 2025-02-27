@@ -1,9 +1,13 @@
 TO DO: 
 
-UPDATE GITIGNORE AND PUSH ON GITHUB (env.js in public folder of front)
-HOSTING ON RENDER / NETLIFY (env.js in public folder of front - will need updating with render site when hosting)
-ADD SKILLS ON USERS 
+
+Update access and refresh token expiry times. 
+Populate the website with users and give them some skills
+
 README
+👤
+&#9776; ☰
+
 
 MAYBE: 
 TARTE AU CITRON
