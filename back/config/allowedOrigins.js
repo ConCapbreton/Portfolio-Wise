@@ -1,5 +1,5 @@
 const allowedOrigins = [
-    'https://portfoliowise.netlify.app/',
+    'https://portfoliowise.netlify.app',
     //etc
 ]
 
