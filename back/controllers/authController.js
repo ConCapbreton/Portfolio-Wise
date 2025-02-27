@@ -34,13 +34,13 @@ const login = async (req, res) => {
             }
         },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1m' } //IN PRODUCTION SET THIS TO 15 minutes
+            { expiresIn: '15m' } //IN PRODUCTION SET THIS TO 15 minutes
     )
 
     const refreshToken = jwt.sign(
         {"username": foundUser.username },
         process.env.REFRESH_TOKEN_SECRET,
-        {expiresIn: '1d'} //IN PRODUCTION SET THIS TO MAXIMUM 7 DAYS 
+        {expiresIn: '7d'} //IN PRODUCTION SET THIS TO MAXIMUM 7 DAYS 
     )
 
     res.cookie('jwt', refreshToken, {
@@ -89,7 +89,7 @@ const refresh = (req, res) => {
                         }
                     },
                         process.env.ACCESS_TOKEN_SECRET,
-                        { expiresIn: '1m' } //IN PRODUCTION SET THIS TO 15 minutes
+                        { expiresIn: '15m' } //IN PRODUCTION SET THIS TO 15 minutes
                 )
 
                 res.json({ accessToken, message: decoded.username })

@@ -103,7 +103,7 @@ const updateUser = async (req, res) => {
         const refreshToken = jwt.sign(
                 {"username": updatedUser.username },
                 process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn: '1d'} //IN PRODUCTION SET THIS TO MAXIMUM 7 DAYS 
+                {expiresIn: '7d'} //IN PRODUCTION SET THIS TO MAXIMUM 7 DAYS 
             )
         
             res.cookie('jwt', refreshToken, {
