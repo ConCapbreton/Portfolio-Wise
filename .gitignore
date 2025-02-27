@@ -1,2 +1,24 @@
-/back/node_modules
-.env
+# Node.js (backend)
+back/node_modules
+back/.env
+back/.pnp
+back/pnp.js
+back/build
+
+# React (frontend)
+front/node_modules
+front/.env.local
+front/.env.development.local
+front/.env.test.local
+front/.env.production.local
+front/build
+
+# Miscellaneous
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: Ignoring IDE/editor configurations
+.idea/
+.vscode/

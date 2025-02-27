@@ -28,6 +28,9 @@ const login = async (req, res) => {
             "UserInfo": {
                 "username": foundUser.username,
                 "roles": foundUser.roles,
+                "email": foundUser.email,
+                "id": foundUser._id,
+                "active": foundUser.active,
             }
         },
             process.env.ACCESS_TOKEN_SECRET,
@@ -80,10 +83,13 @@ const refresh = (req, res) => {
                         "UserInfo": {
                             "username": foundUser.username,
                             "roles": foundUser.roles,
+                            "email": foundUser.email,
+                            "id": foundUser._id,
+                            "active": foundUser.active,
                         }
                     },
                         process.env.ACCESS_TOKEN_SECRET,
-                        { expiresIn: '10s' } //IN PRODUCTION SET THIS TO 15 minutes
+                        { expiresIn: '1m' } //IN PRODUCTION SET THIS TO 15 minutes
                 )
 
                 res.json({ accessToken, message: decoded.username })

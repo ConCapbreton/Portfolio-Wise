@@ -1,10 +1,17 @@
-
 TO DO: 
 
+UPDATE GITIGNORE AND PUSH ON GITHUB (env.js in public folder of front)
+HOSTING ON RENDER / NETLIFY (env.js in public folder of front - will need updating with render site when hosting)
+ADD SKILLS ON USERS 
+README
+
+MAYBE: 
+TARTE AU CITRON
+CAPTCHA
 
 # SUMMARY
 
-back folder: a node.js server connected to a MongoDB database with the following dependencies: argon2, cookie-parser, cors, dotenv, express, express-rate-limit, jsonwebtoken, mongoose
+back folder: a node.js server connected to a MongoDB database with the following dependencies: argon2, cookie-parser, cors, dotenv, express, express-rate-limit, jsonwebtoken, mongoose, multer cloudinary multer-storage-cloudinary
 
 front folder: vanilla html/css/javascript that links to the routes in the backend 
 

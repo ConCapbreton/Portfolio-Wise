@@ -1,5 +1,8 @@
 const User = require('../models/User')
+const Skill = require('../models/Skill')
+const deleteCloudinaryImg = require('../services/deleteCloudinaryImg')
 const argon2 = require('argon2')
+const jwt = require('jsonwebtoken')
 
 //@desc Get all users
 //@route GET /users
@@ -18,7 +21,7 @@ const getAllUsers = async (req, res) => {
 
 //@desc Create new user
 //@route POST /users
-//@access Private
+//@access Public
 const createNewUser = async (req, res) => {
     try {
         const { username, password, email, roles } = req.body
@@ -60,12 +63,11 @@ const createNewUser = async (req, res) => {
 //@route PATCH /users
 //@access Private
 const updateUser = async (req, res) => {
-    //CURRENT CODE REQUIRES A VALUE FOR ALL FIELDS - MAYBE UPDATE TO MAKE THIS OPTIONAL?
     
     try {
-        const { id, username, email, roles, active, password } = req.body
+        const { id, username, email, password } = req.body
         
-        if (!id || !username || !email || !roles || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+        if (!id || !username || !email) {
             return res.status(400).json({message: "All fields are required"})
         }
 
@@ -87,9 +89,7 @@ const updateUser = async (req, res) => {
         }
         
         user.username = username
-        user.roles = roles
         user.email = email
-        user.active = active
     
         if (password) {
             user.password = await argon2.hash(password)
@@ -97,7 +97,23 @@ const updateUser = async (req, res) => {
 
         const updatedUser = await user.save()
 
-        res.json({message: `${updatedUser.username} updated`})
+        //DELETE OLD REFRESH TOKEN AND ISSUE A NEW ONE
+        if (req.cookies.jwt) {res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true})}
+
+        const refreshToken = jwt.sign(
+                {"username": updatedUser.username },
+                process.env.REFRESH_TOKEN_SECRET,
+                {expiresIn: '1d'} //IN PRODUCTION SET THIS TO MAXIMUM 7 DAYS 
+            )
+        
+            res.cookie('jwt', refreshToken, {
+                httpOnly: true, //accessible only by web server
+                secure: true, //https
+                sameSite: "None", //cross-site cookie (hosting API and application on another so need this to be None)
+                maxAge: 7 * 24 * 60 *60 * 1000 //cookie expiry set to 7 days (ready for changing the refreshToken expiresIn to 7d when going to production)
+            })
+
+        res.json({message: `User ${updatedUser.username} updated!`, username: updatedUser.username, email: updatedUser.email})
 
     } catch (err) {
         return res.status(500).json({message: `There was an error: ${err.message}`})
@@ -108,16 +124,32 @@ const updateUser = async (req, res) => {
 //@route DELETE /users
 //@access Private
 const deleteUser = async (req, res) => {
-    //NEED TO UPDATE SO A USER CANNOT DELETE THEMSELVES...
-    
+
     try {
-        const { id } = req.body
+
+        const {adminId, id} = req.body
+        const adminUser = await User.findById(adminId).exec()
+
+        if (!adminUser || !adminUser.roles.includes("Admin") || adminId === id) {
+            return res.status(401).json({message: 'Unauthorized'})
+        }
 
         if (!id) {
             return res.status(400).json({message: 'User ID Required'})
         }
 
         // IF USER HAS ASSOCIATED DATA THEN HERE YOU NEED TO SEARCH THE DATABASE FOR THIS DATA AND DELETE IT TOO
+        const userSkills = await Skill.find({userId: id}).exec()
+        
+        if (userSkills.length) {
+            for (const skill of userSkills) {
+                if (skill.image || skill.image !== "") {
+                    const publicId = skill.image.split('/').pop().split('.')[0]
+                    await deleteCloudinaryImg(publicId)
+                }
+                await skill.deleteOne()
+            }  
+        }        
 
         const user = await User.findById(id).exec()
 
@@ -131,7 +163,7 @@ const deleteUser = async (req, res) => {
         const result = await user.deleteOne()
         
         if (result.deletedCount > 0) {
-            res.json({message: `Username ${deletedUserName} with ID ${deletedUserid} deleted`})
+            res.json({message: `Username ${deletedUserName} with ID ${deletedUserid} and associated data deleted`})
         } else {
             throw new Error(`Username ${deletedUserName} was not deleted`)
         }
@@ -141,9 +173,44 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const adminUpdateUser = async (req, res) => {
+    
+    try {
+        const { id, adminId, roles, active } = req.body
+
+        //ROLES CHECK FOR ADMIN
+        const adminUser = await User.findById(adminId).exec()
+
+        if (!adminUser || !adminUser.roles.includes("Admin")) {
+            return res.status(401).json({message: 'Unauthorized'})
+        }
+
+        if (!roles || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+            return res.status(400).json({message: "All fields are required"})
+        }
+
+        const user = await User.findById(id).exec()
+
+        if (!user) {
+            return res.status(400).json({message: "User not found"})
+        }
+        
+        user.roles = roles
+        user.active = active
+
+        const updatedUser = await user.save()
+
+        res.json({message: `User ${updatedUser.username} updated!`})
+
+    } catch (err) {
+        return res.status(500).json({message: `There was an error: ${err.message}`})
+    }
+}
+
 module.exports = {
     getAllUsers,
     createNewUser,
     updateUser, 
-    deleteUser
+    deleteUser,
+    adminUpdateUser,
 }
