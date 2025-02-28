@@ -1,130 +1,163 @@
-TO DO: 
+# Portfolio Wise - Dynamic Portfolio with Dashboard
 
+## 🎯 Project Overview
+This project is a dynamic portfolio application that allows users to manage and display their skills. It features a secure user authentication system, a responsive design, and a dashboard for managing skills. The application is built using the MERN stack (MongoDB, Express, React, Node.js).
 
-Update access and refresh token expiry times. 
-Populate the website with users and give them some skills
+- **Live Demo**:  
+  - You can check out the live app [here](https://portfoliowise.netlify.app/portfolio).
 
-README
-👤
-&#9776; ☰
+## 🚀 Project Details
 
+### Features:
+- **Dynamic Portfolio**: Users can create, update, and delete their skills in a dynamic portfolio.
+- **User Authentication**: Secure login and signup process with JWT and Argon2.
+- **Admin Dashboard**: Admin users have additional privileges to manage other users' permissions and status (Active/Inactive).
+- **Responsive Design**: Built mobile-first with **Ant Design** for UI components.
 
-MAYBE: 
-TARTE AU CITRON
-CAPTCHA
+### Technologies:
+#### **Frontend**:
+- **React**: For building the dynamic and responsive UI.
+- **React Router DOM**: For navigation and routing within the app.
+- **Axios**: For making HTTP requests to the backend API.
+- **Ant Design**: For UI components (forms, buttons, modals, etc.).
+- **Font Awesome**: For including icons (used for hamburger menu, user settings, etc.).
+- **JWT Decode**: For decoding JWT tokens on the client-side.
 
-# SUMMARY
+#### **Backend**:
+- **Node.js (Express)**: For building the server and handling requests.
+- **MongoDB**: A NoSQL database for storing users, skills, and other data.
+- **Mongoose**: An ODM (Object Document Mapper) for MongoDB, providing a schema-based solution to model application data.
+- **jsonwebtoken (JWT)**: For secure user authentication and managing user sessions.
+- **argon2**: A password hashing algorithm for secure password storage.
+- **Cloudinary**: For managing and storing image uploads.
+- **Multer**: For handling `multipart/form-data` and enabling image uploads via Cloudinary.
+- **Multer-Storage-Cloudinary**: Storage engine for Multer to directly upload images to Cloudinary.
+- **cookie-parser**: For parsing cookies, enabling session management.
+- **cors**: To enable Cross-Origin Resource Sharing, allowing communication between the frontend and backend.
+- **express-rate-limit**: To limit the number of requests from a client, adding a layer of security.
+- **dotenv**: For managing environment variables securely.
+- **Deployment**: Render (backend), Netlify (frontend)
 
-back folder: a node.js server connected to a MongoDB database with the following dependencies: argon2, cookie-parser, cors, dotenv, express, express-rate-limit, jsonwebtoken, mongoose, multer cloudinary multer-storage-cloudinary
+## 📂 Project Structure
+The project consists of three main folders:
 
-front folder: vanilla html/css/javascript that links to the routes in the backend 
+- **front**: React frontend for the application
+- **back**: Node.js backend for the API and authentication
+- **Dossier Conception**: Contains the client report, graphic charter, wireframes, maquettes, Postman collection and the original instruction.
 
-This code is designed to be used as starter code for projects that have users that will need to be authorised and authenticated. Both the front and backend code will most likely need to be adapted to your specific project (but it gives a solid base so that you dont have to start from scratch). 
+### GitHub Repo:
+[GitHub Repository](https://github.com/ConCapbreton/Portfolio-Wise)
 
-## BACK:
-- has a User model (mongoose schema - (see './back/models/User.js`)
-- has users routes (register (CREATE), modify (UPDATE), delete (DELETE) as well as getAll should it be required. There is no getUserById.) - (see './back/routes/userRoutes.js` and './back/controllers/userControllers.js`)
-- has auth routes (login (POST), logout (POST) and refresh (GET) using a refreshToken to get a new accessToken) - (see './back/routes/authRoutes.js` and './back/controllers/authControllers.js`)
-- allows the protection of certain routes controlled using jwt access and refresh tokens (see `./back/middleware/verifyJWT.js`) 
-- allows user roles by sending username and user roles in the refreshToken in the cookie.
-- uses `express-rate-limit` to disuade users trying to guess passwords (see `./back/middleware/loginLimiter.js`)
+---
 
-> [!NOTE]
-- DELETE USER (CODE SHOULD BE UPDATED SO THAT A USER CANNOT DELETE THEMSELVES...)
-- UPDATE USER (CODE REQUIRES YOU TO PROVIDE ALL USER FIELDS EXCEPT PASSWORD - MAYBE UPDATE CODE SO YOU CAN SELECT WHICH FIELDS TO SEND / UPDATE)
+## 📌 Features
 
-## FRONT: 
-- fetches for the backend routes (see './front/fetches/authFetches' and './front/fetches/userFetches') 
-- HTML forms with labels / inputs / submits / ids and other relevant attributes to verify the data provided by a user (see './front/index.html') 
-- frontend form submission validation logic in javascript for ID, USERNAME, EMAIL and PASSWORD inputs including REGEX (see './front/formLogic/formLogic.js')
-- example decoding of the refresh cookie in React in order to get a user's roles (see './front/userRolesExampleReactComponent')
+- **User Authentication**: 
+- Users can sign up and log in securely.
+  - **JWT Authentication**: The app uses a two-token system for secure authentication with **JWT** (JSON Web Tokens):
+    - **Access Token**: A short-lived JWT used to authenticate user requests. It is included in the `Authorization` header for API calls.
+    - **Refresh Token**: A secure, long-lived JWT stored in an **HTTP-only cookie**, ensuring it is not accessible from the client-side JavaScript preventing exposure to XSS vulnerabilities. It is used to obtain a new access token when the current one expires, enabling seamless user sessions.
 
-> [!NOTE]
-- Example code of how to access and use 'user roles' is included in './front/userRolesExampleReactComponent' but this logic is not incorperated into this project.
+- **User Roles**:
+  - Users can be assigned two roles: **Basic** and **Admin**.
+  - Admin users have additional privileges, such as the ability to:
+    - Promote or demote users to/from Admin role.
+    - Mark a user account as **Inactive**, preventing them from logging in.
+    - Delete a user account and their associated data, including images stored on Cloudinary.
 
-# HOW TO USE
+- **Skill Management**:
+  - Users can create, update, and delete their skill entries.
+  - Skills are displayed on the **Portfolio Page** as interactive cards, showing details like title, category, and proficiency level.
+  
+- **User Dashboard**:
+  - Users have access to a **Dashboard** where they can manage their portfolio (add, edit, or delete skills).
+  - Admin users have a **Users List Page** where they can manage other users (promote, deactivate, delete).
+  - All Users can consult the skills of all the other Users. 
 
-## TEST THE CODE 
-- Clone the Git repository into your IDE or download the zip folder of the project and open the extracted folder in your IDE.
+- **Mobile-First & Responsive Design**:
+  - The app is designed using a mobile-first approach and is fully responsive, offering a smooth experience on both mobile devices and desktops.
+  - A hamburger menu is used on mobile and tablet devices, while desktop users have a navigation bar.
 
-### BACKEND
-- In the terminal navigate to the folder in your project where the package.json for the backend is located ('/back').
+- **Cloudinary Image Upload**:
+  - User images are stored and managed securely using Cloudinary.
+  - Users can upload images as part of their portfolio and skill entries.
 
-> [!IMPORTANT]
-- create a .env file in the back folder with the following variables (you will need to create your own mongoDB database and collection and use the connection string provided for `DATABASE_URI`): 
+---
+
+## 🛠 Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/ConCapbreton/Portfolio-Wise.git
+cd Portfolio-Wise
 ```
-NODE_ENV=development
-DATABASE_URI=mongodb+srv://connorsexton:ElbidHXFWTAn7Um8@cluster0.opeis.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-ACCESS_TOKEN_SECRET=248d959590237cb375c2141f45021c6623277dbe894c3f11efe5371b60643583668fd0690ff48eab7fd0d0c04a709b05a68b69e41f67aa672d21d9de1a40b753
-REFRESH_TOKEN_SECRET=4d811e30aa0927baa08efc5917ea12f0dd70a9e4e081c4616aa43279e197b704d47263feac8bf5147947b3166437199bea2e8e25e4ac81923843d713540463c7
-PORT=4000
+
+### 2. Set Up Frontend
+
+1. Navigate to the `frontend` folder and install dependencies:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. Create a `.env` file in the `frontend` folder and add the following environment variable:
+   ```bash
+   REACT_APP_API_URL=http://localhost:5000  # Update with the backend URL (for local development or production URL)
+   ```
+
+### 3. Set Up Backend
+
+1. Navigate to the `backend` folder and install dependencies:
+   ```bash
+   cd ../backend
+   npm install
+   ```
+
+2. Create a `.env` file in the `backend` folder and add the following environment variables:
+   ```bash
+   DATABASE_URI=mongodb://localhost:27017/portfolio-wise  # Replace with your MongoDB connection string
+   ACCESS_TOKEN_SECRET=your-access-token-secret
+   REFRESH_TOKEN_SECRET=your-refresh-token-secret
+   PORT=5000  # You can change the port if necessary
+   CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
+   CLOUDINARY_API_KEY=your-cloudinary-api-key
+   CLOUDINARY_API_SECRET=your-cloudinary-api-secret
+   ```
+
+   **Note**: Update the values of the environment variables with the appropriate credentials.
+
+### 4. Update `allowedOrigins` in the Backend
+
+To run the project locally, you need to update the `allowedOrigins` or `corsOptions` in the backend (`backend/corsOptions.js`) to reflect the locally hosted frontend URL.
+
+For local development, you should add your frontend URL to `allowedOrigins`:
+
+```js
+const allowedOrigins = [
+    'http://localhost:3000',  // Add the frontend URL when running locally
+    // Include other URLs for production, etc.
+];
 ```
 
-> [!TIP]
-- In terminal type `node`
-- require('crypto').randomBytes(64).toString('hex')
-- This will give you a random code to use as the access and refresh tokens secrets keys
+### 5. Run the Application Locally
 
-- Install dependencies
-  ```bash
-  npm install 
-  ```
-- Start the app
-  ```bash
-  npm start
-  ```
+To run the backend and frontend locally, follow these steps:
 
-- Either deploy your frontend on port 5500 or add your frontend's localhost address to the corsOptions variable (back/config/allowedOrigins.js).
+#### Backend:
+1. In the `backend` folder, run the following command:
+   ```bash
+   npm start
+   ```
+   This will start the backend server on the port specified (default is 5000).
 
-### FRONTEND
-- Open the `./Code/front/index.html` file in your web browser (either on port 5500 or having updated the backend code as per the instruction above).
+#### Frontend:
+1. In the `frontend` folder, run the following command:
+   ```bash
+   npm start
+   ```
+   This will start the frontend development server and the app will be accessible at `http://localhost:3000` by default.
 
-> [!TIP]
-- The refresh route is only set for when you initially load the page. 
-- Once your front and back end are up and running locally if you have not changed the expiry time for your accessToken token (1 minute) then you will get the "Unauthorized" or "Forbidden" response on the protected routes pretty quickly.
-- You can change the accessToken expiry time when running locally to avoid this.
-- You should update your fetchs' logic for your own project to check the refresh route before returning these messages to the user (it may just be that a new accessToken is required).   
+### 6. Testing the API
 
-## USE THE CODE IN YOUR PROJECT AND DEPLOYMENT / PRODUCTION
-### BACK: 
-Copy and paste the code in the back folder into your project and follow the instructions in the "TEST CODE" section above to get it running. 
-
-To adapt the code to your project in development: 
-- see the comments in the server.js file on how to add the jwtVerify middleware to your routes
-
-Before going to production / deploying your project online: 
-- There is a handy NODE_ENV secret key set to development - if you deploy your project you can change this to production as a reminder that the code may no longer work / be suitable locally.
-- remove || !origin from './config/corsOptions'
-- update the access and refresh token expiry times (in the './controllers/authController' file) as advised in the comments
-
-### FRONT
-Copy and paste anything that may be relevant into your project and update as required (for example you will need to update the urls of the fetches so that calls are made to your server and adapt the various forms' HTML and their js verification logic). 
-
-# WHAT THIS CODE PROVIDES
-mongoose schema for a User model ('./models/User.js) - which contains username, password, email, roles and active fields (update this as you require)
-userRoutes ('/users') with following methods in the userController:
-GET getAllUsers
-POST createNewUser
-PATCH updateUser
-DELETE deleteUser (this function ('./controllers/userController')) needs to be updated with any other database info (specific to your project) associated with this user being deleted at the same time.  
-
-authRoutes ('/auth') with following methods in the authController:
-('/') POST login: send the username and password in the body. A succesful response sends the accessToken in the body and refreshToken is set automatically in the cookie 
-('/refresh') GET refresh: issues a new accessToken assuming a valid refresh token
-('/logout') POST logout: removes the refreshToken from the cookie
-
-# WHAT TO DO ON THE FRONTEND
-## LOGOUT
-The easist of the routes: 
-A logout button that sends a POST request to the /auth/logout route. Nothing to add in the body or the header. Either there was no jwt refresh token in the header to begin with or it is removed. 
-Upon receipt of response you should re-direct the user to the home / login page (if working in React you should clear relevant state eg accessToken). 
-
-## LOGIN
-Send the username and password in the body of the request to the post  
-
-## REFRESH
-When accessing protected routes (as per the below) you need to check the response. If the accessToken is expired you need to send a GET request to the auth/refresh route. 
-Either you will get a new accessToken and you can retry your protected route. Or your refresh token is expired and the user is going to have to log back in.  
-
-## ACCESSING ANY ROUTE WHICH IS PROTECTED BY JWT: 
-headers.set("authorization", `Bearer ${accessToken}`) //assuming you are in React and getting the accessToken from the state
+You can test the backend API using tools like **Postman** or **Insomnia**. A Postman collection is included in the project for easier testing of API routes. You can import the collection from the `Dossier Conception` folder.
+```
