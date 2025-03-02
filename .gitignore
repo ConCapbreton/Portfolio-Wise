@@ -7,6 +7,7 @@ back/build
 
 # React (frontend)
 front/node_modules
+front/.env
 front/.env.local
 front/.env.development.local
 front/.env.test.local
